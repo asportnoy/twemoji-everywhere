@@ -2,14 +2,24 @@ import { types } from "replugged";
 
 const patchFn = `window.replugged.plugins.getExports('dev.albertp.TwemojiEverywhere').patchText`;
 
+const replace = (_: string, prefix: unknown, text: unknown, suffix: unknown): string => {
+  return `${prefix}${patchFn}(${text})${suffix}`;
+};
+
 const patches: types.PlaintextPatch[] = [
   {
     replacements: [
       {
         match: /(className:\w+\(\)\.channelName,children:)([\w=:?]+)(})/g,
-        replace: (_, prefix, text, suffix) => {
-          return `${prefix}${patchFn}(${text})${suffix}`;
-        },
+        replace,
+      },
+    ],
+  },
+  {
+    replacements: [
+      {
+        match: /(children:)(\w+\.\w+\.Messages.BEGINNING_CHANNEL_\w+\.format\(.+?\))(}\))/g,
+        replace,
       },
     ],
   },

@@ -41,6 +41,8 @@ export function stop(): void {
   injector.uninjectAll();
 }
 
-export function patchText(text: string): React.ReactElement {
+export function patchText(text: unknown): unknown {
+  if (Array.isArray(text)) return text.map(patchText);
+  if (typeof text !== "string") return text;
   return emojiParser(text);
 }
