@@ -12,6 +12,8 @@ type ChannelHeader = React.FC & {
   Title: (...args: unknown[]) => unknown;
 };
 
+type MemberListMod = (args: { name: string | React.ReactElement }) => React.ReactElement;
+
 async function patchChannelHeader(): Promise<void> {
   const headerMod = await waitForModule<Record<string, ChannelHeader>>(
     filters.bySource(/\w+.Icon=\w+;\w+\.Title=/),
@@ -30,19 +32,33 @@ async function patchChannelHeader(): Promise<void> {
   });
 }
 
+async function patchMemberList(): Promise<void> {
+  const memberListMod = await waitForModule<Record<string, MemberListMod>>(
+    filters.bySource(/=\w+\.dotAlignment/),
+  );
+  injector.before(memberListMod, "Z", ([args]) => {
+    if (!args.name) return;
+    if (typeof args.name !== "string") return;
+    args.name = patchText(args.name);
+  });
+}
+
 export function start(): void {
   const rules = _.pick(parser.defaultRules, ["text", "emoji"]);
   emojiParser = parser.reactParserFor(rules);
 
   void patchChannelHeader();
+  void patchMemberList();
 }
 
 export function stop(): void {
   injector.uninjectAll();
 }
 
-export function patchText(text: unknown): unknown {
-  if (Array.isArray(text)) return text.map(patchText);
+export function patchText(text: string): React.ReactElement;
+export function patchText(text: string[]): React.ReactElement[];
+export function patchText(text: string | string[]): React.ReactElement | React.ReactElement[] {
+  if (Array.isArray(text)) return text.map((str) => patchText(str));
   if (typeof text !== "string") return text;
   return emojiParser(text);
 }
