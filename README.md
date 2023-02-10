@@ -14,3 +14,5 @@ themselves).
 - Names in member list
 - Names in member list popout
 - Names in user profile
+- Embed author names
+- Embed footer text

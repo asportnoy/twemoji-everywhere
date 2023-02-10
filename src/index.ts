@@ -17,6 +17,17 @@ type MemberMod = (args: {
   nickname?: string | React.ReactElement;
 }) => React.ReactElement;
 
+type EmbedMod = (args: {
+  embed: {
+    author?: {
+      name?: string | React.ReactElement;
+    };
+    footer?: {
+      text?: string | React.ReactElement;
+    };
+  };
+}) => React.ReactElement;
+
 const memberReplaceFn: (args: Parameters<MemberMod>) => void = ([args]) => {
   const key = "nickname" in args ? "nickname" : "name";
 
@@ -80,6 +91,23 @@ async function patchPopoutNickname(): Promise<void> {
   injector.before(popoutNameMod.exports, "Z", memberReplaceFn);
 }
 
+async function patchEmbeds(): Promise<void> {
+  const embedMod = await waitForModule<Record<string, EmbedMod>>(
+    filters.bySource(".renderAuthor="),
+  );
+  const key = Object.entries(embedMod).find(([_, x]) => "defaultProps" in x)?.[0];
+  if (!key) {
+    logger.warn("Could not find embed module");
+    return;
+  }
+  injector.before(embedMod, key, ([{ embed }]) => {
+    const name = embed.author?.name;
+    const footer = embed.footer?.text;
+    if (name && typeof name === "string") embed.author!.name = patchText(name);
+    if (footer && typeof footer === "string") embed.footer!.text = patchText(footer);
+  });
+}
+
 export function start(): void {
   const rules = _.pick(parser.defaultRules, ["text", "emoji"]);
   emojiParser = parser.reactParserFor(rules);
@@ -88,6 +116,7 @@ export function start(): void {
   void patchMemberList();
   void patchPopoutName();
   void patchPopoutNickname();
+  void patchEmbeds();
 }
 
 export function stop(): void {
