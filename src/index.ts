@@ -26,6 +26,12 @@ const memberReplaceFn: (args: Parameters<MemberMod>) => void = ([args]) => {
   args[key] = patchText(val);
 };
 
+const headerPaths = [
+  "children[0].props.children[1].props.children.props",
+  "children[0].props.children[2].props.children.props",
+  "children[0].props.children[0].props.children[1].props",
+];
+
 async function patchChannelHeader(): Promise<void> {
   const headerMod = await waitForModule<Record<string, ChannelHeader>>(
     filters.bySource(/\w+.Icon=\w+;\w+\.Title=/),
@@ -36,11 +42,19 @@ async function patchChannelHeader(): Promise<void> {
     return;
   }
   injector.before(headerMod, headerModKey, ([args]) => {
-    const childArr = _.get(args, "children[0].props.children[1].props.children.props.children");
-    if (!childArr) return;
-    if (!Array.isArray(childArr)) return;
-    if (typeof childArr[2] !== "string") return;
-    childArr[2] = patchText(childArr[2]);
+    const children = headerPaths.map((x) => _.get(args, x));
+    children.forEach((child) => {
+      if (!child) return;
+      if (typeof child === "object" && "children" in child) {
+        if (Array.isArray(child.children)) {
+          child.children = child.children.map((x: unknown) =>
+            typeof x === "string" ? patchText(x) : x,
+          );
+        } else if (typeof child.children === "string") {
+          child.children = patchText(child.children);
+        }
+      }
+    });
   });
 }
 
