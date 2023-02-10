@@ -34,6 +34,14 @@ const patches: types.PlaintextPatch[] = [
   {
     replacements: [
       {
+        match: /(\(\)\.slateTextArea,\w+\),placeholder:)(\w+)(,)/g,
+        replace,
+      },
+    ],
+  },
+  {
+    replacements: [
+      {
         match: /(children:)(\w+\.\w+\.Messages.BEGINNING_CHANNEL_\w+\.format\(.+?\))(}\))/g,
         replace,
       },
