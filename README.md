@@ -10,7 +10,7 @@ themselves).
 - Channel names in the channel list
 - Channel name in the header
 - Channel name at the beginning of the channel
-- Placeholder in message bar (if possible)
+- Placeholder in message bar
 - Names in message header
 - Names in member list
 - Names in member list popout
