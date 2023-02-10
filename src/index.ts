@@ -12,7 +12,19 @@ type ChannelHeader = React.FC & {
   Title: (...args: unknown[]) => unknown;
 };
 
-type MemberListMod = (args: { name: string | React.ReactElement }) => React.ReactElement;
+type MemberMod = (args: {
+  name?: string | React.ReactElement;
+  nickname?: string | React.ReactElement;
+}) => React.ReactElement;
+
+const memberReplaceFn: (args: Parameters<MemberMod>) => void = ([args]) => {
+  const key = "nickname" in args ? "nickname" : "name";
+
+  const val = args[key];
+  if (!val) return;
+  if (typeof val !== "string") return;
+  args[key] = patchText(val);
+};
 
 async function patchChannelHeader(): Promise<void> {
   const headerMod = await waitForModule<Record<string, ChannelHeader>>(
@@ -33,14 +45,25 @@ async function patchChannelHeader(): Promise<void> {
 }
 
 async function patchMemberList(): Promise<void> {
-  const memberListMod = await waitForModule<Record<string, MemberListMod>>(
+  const memberListMod = await waitForModule<Record<string, MemberMod>>(
     filters.bySource(/=\w+\.dotAlignment/),
   );
-  injector.before(memberListMod, "Z", ([args]) => {
-    if (!args.name) return;
-    if (typeof args.name !== "string") return;
-    args.name = patchText(args.name);
-  });
+  injector.before(memberListMod, "Z", memberReplaceFn);
+}
+
+async function patchPopoutName(): Promise<void> {
+  const popoutNameMod = await waitForModule<Record<string, MemberMod>>(
+    filters.bySource(".invertBotTagColor"),
+  );
+  injector.before(popoutNameMod, "Z", memberReplaceFn);
+}
+
+async function patchPopoutNickname(): Promise<void> {
+  const popoutNameMod = await waitForModule<{ exports: Record<string, MemberMod> }>(
+    filters.bySource(".shouldCopyOnClick"),
+    { raw: true },
+  );
+  injector.before(popoutNameMod.exports, "Z", memberReplaceFn);
 }
 
 export function start(): void {
@@ -49,6 +72,8 @@ export function start(): void {
 
   void patchChannelHeader();
   void patchMemberList();
+  void patchPopoutName();
+  void patchPopoutNickname();
 }
 
 export function stop(): void {
