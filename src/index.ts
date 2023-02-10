@@ -1,26 +1,13 @@
-import { Injector, Logger, webpack } from "replugged";
+import { common } from "replugged";
+const { lodash: _, parser } = common;
 
-const inject = new Injector();
-const logger = Logger.plugin("PluginTemplate");
+let emojiParser: ReturnType<typeof parser.reactParserFor>;
 
-export async function start(): Promise<void> {
-  const typingMod = await webpack.waitForModule<{
-    startTyping: (channelId: string) => void;
-  }>(webpack.filters.byProps("startTyping"));
-  const getChannelMod = await webpack.waitForModule<{
-    getChannel: (id: string) => {
-      name: string;
-    };
-  }>(webpack.filters.byProps("getChannel"));
-
-  if (typingMod && getChannelMod) {
-    inject.instead(typingMod, "startTyping", ([channel]) => {
-      const channelObj = getChannelMod.getChannel(channel);
-      logger.log(`Typing prevented! Channel: #${channelObj?.name ?? "unknown"} (${channel}).`);
-    });
-  }
+export function start(): void {
+  const rules = _.pick(parser.defaultRules, ["text", "emoji"]);
+  emojiParser = parser.reactParserFor(rules);
 }
 
-export function stop(): void {
-  inject.uninjectAll();
+export function patchText(text: string): void {
+  return emojiParser(text);
 }
