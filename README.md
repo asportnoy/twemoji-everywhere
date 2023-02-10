@@ -11,6 +11,7 @@ themselves).
 - Channel name in the header
 - Channel name at the beginning of the channel
 - Placeholder in message bar (if possible)
+- Names in message header
 - Names in member list
 - Names in member list popout
 - Names in user profile

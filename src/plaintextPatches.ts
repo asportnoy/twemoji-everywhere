@@ -47,6 +47,14 @@ const patches: types.PlaintextPatch[] = [
       },
     ],
   },
+  {
+    replacements: [
+      {
+        match: /(\(\)\.username,.+,children:)(\w+\+\w+)(})/g,
+        replace,
+      },
+    ],
+  },
 ];
 
 export default patches;
