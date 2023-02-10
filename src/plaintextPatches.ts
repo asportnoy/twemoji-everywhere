@@ -10,7 +10,7 @@ const patches: types.PlaintextPatch[] = [
   {
     replacements: [
       {
-        match: /(className:\w+\(\)\.channelName,children:)([\w=:?]+)(})/g,
+        match: /(\(\).channelName\)?,[^}]*children:)([\w=:?]+(?:\.name)?)(})/g,
         replace,
       },
     ],
