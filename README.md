@@ -7,10 +7,10 @@ themselves).
 
 ## Components supported
 
-- [x] Channel names in the channel list
-- [ ] Channel name in the header
-- [ ] Channel name at the beginning of the channel
-- [ ] Placeholder in message bar (if possible)
-- [ ] Names in member list
-- [ ] Names in member list popout
-- [ ] Names in user profile
+- Channel names in the channel list
+- Channel name in the header
+- Channel name at the beginning of the channel
+- Placeholder in message bar (if possible)
+- Names in member list
+- Names in member list popout
+- Names in user profile
