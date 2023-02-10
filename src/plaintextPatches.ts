@@ -18,6 +18,22 @@ const patches: types.PlaintextPatch[] = [
   {
     replacements: [
       {
+        match: /(\.Messages\.THREAD}[^}]+className:\w+\(\)\.name,children:)(\w+\.name)(}\))/g,
+        replace,
+      },
+    ],
+  },
+  {
+    replacements: [
+      {
+        match: /(\(\).header\),variant:"heading-xxl\/semibold",children:)(\w+)(}\))/g,
+        replace,
+      },
+    ],
+  },
+  {
+    replacements: [
+      {
         match: /(children:)(\w+\.\w+\.Messages.BEGINNING_CHANNEL_\w+\.format\(.+?\))(}\))/g,
         replace,
       },
