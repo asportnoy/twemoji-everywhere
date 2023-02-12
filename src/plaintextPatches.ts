@@ -7,6 +7,7 @@ const replace = (_: string, prefix: unknown, text: unknown, suffix: unknown): st
 };
 
 const patches: types.PlaintextPatch[] = [
+  // Channel name
   {
     replacements: [
       {
@@ -15,6 +16,7 @@ const patches: types.PlaintextPatch[] = [
       },
     ],
   },
+  // Thread start message
   {
     replacements: [
       {
@@ -23,14 +25,16 @@ const patches: types.PlaintextPatch[] = [
       },
     ],
   },
+  // Thread header
   {
     replacements: [
       {
-        match: /(\(\).header\),variant:"heading-xxl\/semibold",children:)(\w+)(}\))/g,
+        match: /(\(\)\.header\),variant:"heading-xxl\/semibold",children:)(\w+)(}\))/g,
         replace,
       },
     ],
   },
+  // Text area placeholder
   {
     replacements: [
       {
@@ -39,6 +43,7 @@ const patches: types.PlaintextPatch[] = [
       },
     ],
   },
+  // Channel top message
   {
     replacements: [
       {
@@ -47,10 +52,38 @@ const patches: types.PlaintextPatch[] = [
       },
     ],
   },
+  // Member list
   {
     replacements: [
       {
         match: /(\(\)\.username,.+,children:)(\w+\+\w+)(})/g,
+        replace,
+      },
+    ],
+  },
+  // Channel mention
+  {
+    replacements: [
+      {
+        match: /(className:"channelMention",[^}]*,children:)([^}]+)(})/g,
+        replace,
+      },
+    ],
+  },
+  // Role mention
+  {
+    replacements: [
+      {
+        match: /(children:)([^}]+)(}.+className:"mention")/g,
+        replace,
+      },
+    ],
+  },
+  // User mention
+  {
+    replacements: [
+      {
+        match: /(children:)("@"\.concat\(\w+\))()/g,
         replace,
       },
     ],
