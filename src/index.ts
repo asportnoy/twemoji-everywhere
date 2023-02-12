@@ -47,7 +47,7 @@ async function patchChannelHeader(): Promise<void> {
   const headerMod = await waitForModule<Record<string, ChannelHeader>>(
     filters.bySource(/\w+.Icon=\w+;\w+\.Title=/),
   );
-  const headerModKey = getFunctionKeyBySource("().toolbar", headerMod);
+  const headerModKey = getFunctionKeyBySource(headerMod, "().toolbar");
   if (!headerModKey) {
     logger.warn("Could not find channel header module");
     return;
