@@ -16,6 +16,15 @@ const patches: types.PlaintextPatch[] = [
       },
     ],
   },
+  // Category name
+  {
+    replacements: [
+      {
+        match: /(className:\w+\(\).name,children:[\d\w.,(){}]+children:)(i\.name)(})/g,
+        replace,
+      },
+    ],
+  },
   // Thread start message
   {
     replacements: [
