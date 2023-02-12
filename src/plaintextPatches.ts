@@ -88,6 +88,15 @@ const patches: types.PlaintextPatch[] = [
       },
     ],
   },
+  // Role mentions on profile
+  {
+    replacements: [
+      {
+        match: /(className:\w+\(\)\.roleNameOverflow,children:)(\w+\.name)(})/g,
+        replace,
+      },
+    ],
+  },
 ];
 
 export default patches;
