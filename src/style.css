@@ -41,6 +41,10 @@
   height: 16px;
 }
 
+[class^="placeholder-"][class^="slateTextArea-"] {
+  display: inline-flex;
+  align-items: center;
+}
 .twemoji-everywhere-emoji.emoji-textarea-placeholder {
   height: 19px;
 }
