@@ -56,7 +56,6 @@ async function patchChannelHeader(): Promise<void> {
   }
   injector.before(headerMod, headerModKey, ([args]) => {
     const children = headerPaths.map((x) => _.get(args, x));
-    console.log(args, children);
     children.forEach((child) => {
       if (!child) return;
       if (typeof child === "object" && "children" in child) {
@@ -140,6 +139,7 @@ export function patchText(
   if (!Array.isArray(res)) return res;
   return res.map((x) => {
     if (typeof x !== "object") return x;
+    if (!x.type || !x.props || !x.props.node) return x;
     const emoji = x.props.node.surrogate;
     const mainType = x.type(x.props);
     const nestedChild = mainType.props.children({});
