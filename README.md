@@ -8,12 +8,15 @@ themselves).
 ## Components supported
 
 - Channel names in the channel list
+- Category names in the channel list
 - Channel name in the header
 - Channel name at the beginning of the channel
 - Placeholder in message bar
 - Names in message header
 - Names in member list
 - Names in member list popout
+- Roles on profile
 - Names in user profile
 - Embed author names
 - Embed footer text
+- Mentions (all types)
