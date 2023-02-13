@@ -2,6 +2,7 @@ import { Injector, Logger, common, webpack } from "replugged";
 const { lodash: _, parser } = common;
 const { filters, getFunctionKeyBySource, waitForModule } = webpack;
 import type React from "react";
+import "./style.css";
 
 const logger = Logger.plugin("dev.albertp.TwemojiEverywhere");
 const injector = new Injector();
@@ -123,10 +124,28 @@ export function stop(): void {
   injector.uninjectAll();
 }
 
-export function patchText(text: string): React.ReactElement;
-export function patchText(text: string[]): React.ReactElement[];
-export function patchText(text: string | string[]): React.ReactElement | React.ReactElement[] {
+export function patchText(text: string, extraClass?: string): React.ReactElement;
+export function patchText(text: string[], extraClass?: string): React.ReactElement[];
+export function patchText(
+  text: string | string[],
+  extraClass?: string,
+): React.ReactElement | React.ReactElement[] {
   if (Array.isArray(text)) return text.map((str) => patchText(str));
   if (typeof text !== "string") return text;
-  return emojiParser(text);
+  const res = emojiParser(text);
+  if (!Array.isArray(res)) return res;
+  return res.map((x) => {
+    if (typeof x !== "object") return x;
+    const emoji = x.props.surrogate;
+    const mainType = x.type(x.props);
+    const nestedChild = mainType.props.children({});
+    const finalChild = nestedChild.props.children({
+      "aria-label": emoji,
+    });
+    finalChild.props.className += ` twemoji-everywhere-emoji ${extraClass || ""}`;
+    nestedChild.props.children = () => finalChild;
+    mainType.type = () => nestedChild;
+    x.type = () => mainType;
+    return x;
+  });
 }
