@@ -25,11 +25,11 @@
   height: 16px;
 }
 
-[class^="members-"] .twemoji-everywhere-emoji.emoji-member-name {
+[class*="members-"] .twemoji-everywhere-emoji.emoji-member-name {
   height: 19px;
 }
 
-[class^="channelName-"] {
+[class*="channelName-"] {
   display: inline-flex;
   align-items: center;
 }
@@ -41,7 +41,7 @@
   height: 16px;
 }
 
-[class^="placeholder-"][class^="slateTextArea-"] {
+[class*="placeholder-"][class*="slateTextArea-"] {
   display: inline-flex;
   align-items: center;
 }
