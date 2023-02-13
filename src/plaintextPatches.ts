@@ -2,8 +2,12 @@ import { types } from "replugged";
 
 const patchFn = `window.replugged.plugins.getExports('dev.albertp.TwemojiEverywhere').patchText`;
 
-const replace = (_: string, prefix: unknown, text: unknown, suffix: unknown): string => {
-  return `${prefix}${patchFn}(${text})${suffix}`;
+const replaceWithClass = (
+  className: string,
+): ((_: string, prefix: unknown, text: unknown, suffix: unknown) => string) => {
+  return (_, prefix, text, suffix): string => {
+    return `${prefix}${patchFn}(${text}, "${className}")${suffix}`;
+  };
 };
 
 const patches: types.PlaintextPatch[] = [
@@ -12,7 +16,7 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(\(\).channelName\)?,[^}]*children:)([\w=:?]+(?:\.name)?)(})/g,
-        replace,
+        replace: replaceWithClass("emoji-channel-name"),
       },
     ],
   },
@@ -21,7 +25,7 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(className:\w+\(\).name,children:[\d\w.,(){}]+children:)(i\.name)(})/g,
-        replace,
+        replace: replaceWithClass("emoji-category-name"),
       },
     ],
   },
@@ -30,7 +34,7 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(\.Messages\.THREAD}[^}]+className:\w+\(\)\.name,children:)(\w+\.name)(}\))/g,
-        replace,
+        replace: replaceWithClass("emoji-thread-start"),
       },
     ],
   },
@@ -39,7 +43,7 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(\(\)\.header\),variant:"heading-xxl\/semibold",children:)(\w+)(}\))/g,
-        replace,
+        replace: replaceWithClass("emoji-thread-header"),
       },
     ],
   },
@@ -48,7 +52,7 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(\(\)\.slateTextArea,\w+\),placeholder:)(\w+)(,)/g,
-        replace,
+        replace: replaceWithClass("emoji-textarea-placeholder"),
       },
     ],
   },
@@ -57,16 +61,16 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(children:)(\w+\.\w+\.Messages.BEGINNING_CHANNEL_\w+\.format\(.+?\))(}\))/g,
-        replace,
+        replace: replaceWithClass("emoji-channel-top-message"),
       },
     ],
   },
-  // Member list
+  // Member popout username
   {
     replacements: [
       {
         match: /(\(\)\.username,.+,children:)(\w+\+\w+)(})/g,
-        replace,
+        replace: replaceWithClass("emoji-popout-username"),
       },
     ],
   },
@@ -75,7 +79,7 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(className:"channelMention",[^}]*,children:)([^}]+)(})/g,
-        replace,
+        replace: replaceWithClass("emoji-mention"),
       },
     ],
   },
@@ -84,7 +88,7 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(children:)([^}]+)(}.+className:"mention")/g,
-        replace,
+        replace: replaceWithClass("emoji-mention"),
       },
     ],
   },
@@ -93,16 +97,16 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       {
         match: /(children:)("@"\.concat\(\w+\))()/g,
-        replace,
+        replace: replaceWithClass("emoji-mention"),
       },
     ],
   },
-  // Role mentions on profile
+  // Roles on profile
   {
     replacements: [
       {
         match: /(className:\w+\(\)\.roleNameOverflow,children:)(\w+\.name)(})/g,
-        replace,
+        replace: replaceWithClass("emoji-profile-roles"),
       },
     ],
   },

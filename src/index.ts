@@ -35,7 +35,7 @@ const memberReplaceFn: (args: Parameters<MemberMod>) => void = ([args]) => {
   const val = args[key];
   if (!val) return;
   if (typeof val !== "string") return;
-  args[key] = patchText(val);
+  args[key] = patchText(val, "emoji-member-name");
 };
 
 const headerPaths = [
@@ -60,10 +60,10 @@ async function patchChannelHeader(): Promise<void> {
       if (typeof child === "object" && "children" in child) {
         if (Array.isArray(child.children)) {
           child.children = child.children.map((x: unknown) =>
-            typeof x === "string" ? patchText(x) : x,
+            typeof x === "string" ? patchText(x, "emoji-header") : x,
           );
         } else if (typeof child.children === "string") {
-          child.children = patchText(child.children);
+          child.children = patchText(child.children, "emoji-header");
         }
       }
     });
@@ -104,8 +104,10 @@ async function patchEmbeds(): Promise<void> {
   injector.before(embedMod, key, ([{ embed }]) => {
     const name = embed.author?.name;
     const footer = embed.footer?.text;
-    if (name && typeof name === "string") embed.author!.name = patchText(name);
-    if (footer && typeof footer === "string") embed.footer!.text = patchText(footer);
+    if (name && typeof name === "string")
+      embed.author!.name = patchText(name, "emoji-embed-author");
+    if (footer && typeof footer === "string")
+      embed.footer!.text = patchText(footer, "emoji-embed-footer");
   });
 }
 
@@ -130,19 +132,19 @@ export function patchText(
   text: string | string[],
   extraClass?: string,
 ): React.ReactElement | React.ReactElement[] {
-  if (Array.isArray(text)) return text.map((str) => patchText(str));
+  if (Array.isArray(text)) return text.map((str) => patchText(str, extraClass));
   if (typeof text !== "string") return text;
   const res = emojiParser(text);
   if (!Array.isArray(res)) return res;
   return res.map((x) => {
     if (typeof x !== "object") return x;
-    const emoji = x.props.surrogate;
+    const emoji = x.props.node.surrogate;
     const mainType = x.type(x.props);
     const nestedChild = mainType.props.children({});
     const finalChild = nestedChild.props.children({
       "aria-label": emoji,
     });
-    finalChild.props.className += ` twemoji-everywhere-emoji ${extraClass || ""}`;
+    finalChild.props.className += ` twemoji-everywhere-emoji ${extraClass || ""}`.trimEnd();
     nestedChild.props.children = () => finalChild;
     mainType.type = () => nestedChild;
     x.type = () => mainType;

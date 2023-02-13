@@ -1,3 +1,58 @@
 .twemoji-everywhere-emoji {
   pointer-events: none;
+  height: 22px;
+  vertical-align: middle;
+}
+
+.twemoji-everywhere-emoji .emoji {
+  height: 100%;
+  width: auto;
+  vertical-align: top;
+}
+
+.mention {
+  display: inline-flex;
+  align-items: center;
+}
+
+.twemoji-everywhere-emoji.emoji-mention {
+  height: 19px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.twemoji-everywhere-emoji.emoji-mention .emoji {
+  height: 16px;
+}
+
+[class^="members-"] .twemoji-everywhere-emoji.emoji-member-name {
+  height: 19px;
+}
+
+[class^="channelName-"] {
+  display: inline-flex;
+  align-items: center;
+}
+.twemoji-everywhere-emoji.emoji-channel-name {
+  height: 19px;
+}
+
+.twemoji-everywhere-emoji.emoji-category-name {
+  height: 16px;
+}
+
+.twemoji-everywhere-emoji.emoji-textarea-placeholder {
+  height: 19px;
+}
+
+.twemoji-everywhere-emoji.emoji-author-name {
+  height: 16px;
+}
+
+.twemoji-everywhere-emoji.emoji-footer-name {
+  height: 56px;
+}
+
+[data-text-variant="heading-xxl/semibold"] .twemoji-everywhere-emoji {
+  height: 42px;
 }
