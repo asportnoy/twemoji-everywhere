@@ -42,6 +42,7 @@ const headerPaths = [
   "children[0].props.children[1].props.children.props",
   "children[0].props.children[2].props.children.props",
   "children[0].props.children[0].props.children[1].props",
+  "children.props.children[2].props.children.props",
 ];
 
 async function patchChannelHeader(): Promise<void> {
@@ -55,6 +56,7 @@ async function patchChannelHeader(): Promise<void> {
   }
   injector.before(headerMod, headerModKey, ([args]) => {
     const children = headerPaths.map((x) => _.get(args, x));
+    console.log(args, children);
     children.forEach((child) => {
       if (!child) return;
       if (typeof child === "object" && "children" in child) {
