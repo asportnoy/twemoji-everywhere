@@ -7,7 +7,7 @@ import "./style.css";
 const logger = Logger.plugin("dev.albertp.TwemojiEverywhere");
 const injector = new Injector();
 
-let emojiParser: ReturnType<typeof parser.reactParserFor>;
+let emojiParser: ReturnType<typeof parser.reactParserFor> | undefined;
 
 type ChannelHeader = React.FC & {
   Title: (...args: unknown[]) => unknown;
@@ -112,9 +112,17 @@ async function patchEmbeds(): Promise<void> {
   });
 }
 
+let running = false;
+
 export function start(): void {
-  const rules = _.pick(parser.defaultRules, ["text", "emoji"]);
-  emojiParser = parser.reactParserFor(rules);
+  running = true;
+
+  if (parser) {
+    const rules = _.pick(parser.defaultRules, ["text", "emoji"]);
+    emojiParser = parser.reactParserFor(rules);
+  } else {
+    logger.warn("replugged.common.parser not found, this plugin will not work");
+  }
 
   void patchChannelHeader();
   void patchMemberList();
@@ -124,15 +132,17 @@ export function start(): void {
 }
 
 export function stop(): void {
+  running = false;
   injector.uninjectAll();
 }
 
-export function patchText(text: string, extraClass?: string): React.ReactElement;
-export function patchText(text: string[], extraClass?: string): React.ReactElement[];
+export function patchText(text: string, extraClass?: string): string | React.ReactElement;
+export function patchText(text: string[], extraClass?: string): Array<string | React.ReactElement>;
 export function patchText(
   text: string | string[],
   extraClass?: string,
-): React.ReactElement | React.ReactElement[] {
+): string | React.ReactElement | Array<string | React.ReactElement> {
+  if (!running || !emojiParser) return text;
   if (Array.isArray(text)) return text.map((str) => patchText(str, extraClass));
   if (typeof text !== "string") return text;
   const res = emojiParser(text);
