@@ -15,6 +15,7 @@ themselves).
 - Names in message header
 - Names in member list
 - Names in member list popout
+- Roles in the member list
 - Roles on profile
 - Names in user profile
 - Embed author names
