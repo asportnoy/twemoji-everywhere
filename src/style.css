@@ -29,6 +29,10 @@
   height: 16px;
 }
 
+.emoji-profile-roles {
+  height: 15px;
+}
+
 [class*="members-"] .twemoji-everywhere-emoji.emoji-member-name {
   height: 19px;
 }
