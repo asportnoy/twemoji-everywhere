@@ -65,6 +65,15 @@ const patches: types.PlaintextPatch[] = [
       },
     ],
   },
+  // Member list role names
+  {
+    replacements: [
+      {
+        match: /(\w=)(\w+\.title)(,\w+=\w+\.count[\s\S]+?className:\w+\(\)\.membersGroup)/g,
+        replace: replaceWithClass("emoji-member-list-role-name"),
+      },
+    ],
+  },
   // Member popout username
   {
     replacements: [
