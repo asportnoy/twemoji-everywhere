@@ -11,108 +11,68 @@ const replaceWithClass = (
 };
 
 const patches: types.PlaintextPatch[] = [
-  // Channel name
   {
     replacements: [
+      // Channel name
       {
         match: /(\(\).channelName\)?,[^}]*children:)([\w=:?]+(?:\.name)?)(})/g,
         replace: replaceWithClass("emoji-channel-name"),
       },
-    ],
-  },
-  // Category name
-  {
-    replacements: [
+      {
+        match: /(\(\).channelName\)?,[^}]*children:\[)(null==\w+\?\w+:\w+)()/g,
+        replace: replaceWithClass("emoji-channel-name"),
+      },
+      // Category name
       {
         match: /(className:\w+\(\).name,children:[\d\w.,(){}]+children:)(i\.name)(})/g,
         replace: replaceWithClass("emoji-category-name"),
       },
-    ],
-  },
-  // Thread start message
-  {
-    replacements: [
+      // Thread start message
       {
         match: /(\.Messages\.THREAD}[^}]+className:\w+\(\)\.name,children:)(\w+\.name)(}\))/g,
         replace: replaceWithClass("emoji-thread-start"),
       },
-    ],
-  },
-  // Thread header
-  {
-    replacements: [
+      // Thread header
       {
         match: /(\(\)\.header\),variant:"heading-xxl\/semibold",children:)(\w+)(}\))/g,
         replace: replaceWithClass("emoji-thread-header"),
       },
-    ],
-  },
-  // Text area placeholder
-  {
-    replacements: [
+      // Text area placeholder
       {
         match: /(\(\)\.slateTextArea,\w+\),placeholder:)(\w+)(,)/g,
         replace: replaceWithClass("emoji-textarea-placeholder"),
       },
-    ],
-  },
-  // Channel top message
-  {
-    replacements: [
+      // Channel top message
       {
         match: /(children:)(\w+\.\w+\.Messages.BEGINNING_CHANNEL_\w+\.format\(.+?\))(}\))/g,
         replace: replaceWithClass("emoji-channel-top-message"),
       },
-    ],
-  },
-  // Member list role names
-  {
-    replacements: [
+      // Member list role names
       {
         match: /(\w=)(\w+\.title)(,\w+=\w+\.count[\s\S]+?className:\w+\(\)\.membersGroup)/g,
         replace: replaceWithClass("emoji-member-list-role-name"),
       },
-    ],
-  },
-  // Member popout username
-  {
-    replacements: [
+      // Member popout username
       {
         match: /(\(\)\.username,.+,children:)(\w+\+\w+)(})/g,
         replace: replaceWithClass("emoji-popout-username"),
       },
-    ],
-  },
-  // Channel mention
-  {
-    replacements: [
+      // Channel mention
       {
         match: /(className:"channelMention",[^}]*,children:)([^}]+)(})/g,
         replace: replaceWithClass("emoji-mention"),
       },
-    ],
-  },
-  // Role mention
-  {
-    replacements: [
+      // Role mention
       {
         match: /(children:)([^}]+)(}.+className:"mention")/g,
         replace: replaceWithClass("emoji-mention"),
       },
-    ],
-  },
-  // User mention
-  {
-    replacements: [
+      // User mention
       {
         match: /(children:)("@"\.concat\(\w+\))()/g,
         replace: replaceWithClass("emoji-mention"),
       },
-    ],
-  },
-  // Roles on profile
-  {
-    replacements: [
+      // Roles on profile
       {
         match: /(className:\w+\(\)\.roleNameOverflow,children:)(\w+\.name)(})/g,
         replace: replaceWithClass("emoji-profile-roles"),
