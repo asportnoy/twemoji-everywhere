@@ -71,26 +71,28 @@ async function patchChannelHeader(): Promise<void> {
   });
 }
 
-async function patchMemberList(): Promise<void> {
-  const memberListMod = await waitForModule<Record<string, MemberMod>>(
-    filters.bySource(/=\w+\.dotAlignment/),
-  );
-  injector.before(memberListMod, "Z", memberReplaceFn);
-}
-
 async function patchPopoutName(): Promise<void> {
   const popoutNameMod = await waitForModule<Record<string, MemberMod>>(
     filters.bySource(".invertBotTagColor"),
   );
-  injector.before(popoutNameMod, "Z", memberReplaceFn);
+  const key = getFunctionKeyBySource(popoutNameMod, ".invertBotTagColor");
+  if (!key) {
+    logger.warn("Could not find popout name module key");
+    return;
+  }
+  injector.before(popoutNameMod, key, memberReplaceFn);
 }
 
 async function patchPopoutNickname(): Promise<void> {
-  const popoutNameMod = await waitForModule<{ exports: Record<string, MemberMod> }>(
-    filters.bySource(".shouldCopyOnClick"),
-    { raw: true },
-  );
-  injector.before(popoutNameMod.exports, "Z", memberReplaceFn);
+  const popoutNicknameMod = await waitForModule<{
+    exports: Record<string, MemberMod>;
+  }>(filters.bySource(".shouldCopyOnClick"), { raw: true });
+  const key = getFunctionKeyBySource(popoutNicknameMod.exports, ".shouldCopyOnClick");
+  if (!key) {
+    logger.warn("Could not find popout nickname module key");
+    return;
+  }
+  injector.before(popoutNicknameMod.exports, key, memberReplaceFn);
 }
 
 async function patchEmbeds(): Promise<void> {
@@ -125,7 +127,6 @@ export function start(): void {
   }
 
   void patchChannelHeader();
-  void patchMemberList();
   void patchPopoutName();
   void patchPopoutNickname();
   void patchEmbeds();

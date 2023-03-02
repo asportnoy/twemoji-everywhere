@@ -13,6 +13,7 @@
 .mention {
   display: inline-flex;
   align-items: center;
+  white-space: pre;
 }
 
 .twemoji-everywhere-emoji.emoji-mention {
@@ -20,6 +21,7 @@
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
+  white-space: pre;
 }
 .twemoji-everywhere-emoji.emoji-mention .emoji {
   height: 16px;
@@ -37,9 +39,20 @@
   height: 19px;
 }
 
+[class*="nameAndDecorators-"] > [class*="name-"] > [class*="username-"] > [class*="username-"] {
+  display: inline-flex;
+  align-items: center;
+  white-space: pre;
+}
+
+.twemoji-everywhere-emoji.emoji-member-list-name {
+  height: 16px;
+}
+
 [class*="channelName-"] {
   display: inline-flex;
   align-items: center;
+  white-space: pre;
 }
 .twemoji-everywhere-emoji.emoji-channel-name {
   height: 19px;
@@ -52,6 +65,7 @@
 [class*="placeholder-"][class*="slateTextArea-"] {
   display: inline-flex;
   align-items: center;
+  white-space: pre;
 }
 .twemoji-everywhere-emoji.emoji-textarea-placeholder {
   height: 19px;

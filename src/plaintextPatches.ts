@@ -47,6 +47,11 @@ const patches: types.PlaintextPatch[] = [
         match: /(children:)(\w+\.\w+\.Messages.BEGINNING_CHANNEL_\w+\.format\(.+?\))(}\))/g,
         replace: replaceWithClass("emoji-channel-top-message"),
       },
+      // Member list
+      {
+        match: /(var \w+=\w+\.roleStyle,\w+=)(\w+\.name)(,)/,
+        replace: replaceWithClass("emoji-member-list-name"),
+      },
       // Member list role names
       {
         match: /(\w=)(\w+\.title)(,\w+=\w+\.count[\s\S]+?className:\w+\(\)\.membersGroup)/g,
