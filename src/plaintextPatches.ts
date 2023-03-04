@@ -39,7 +39,8 @@ const patches: types.PlaintextPatch[] = [
       },
       // Text area placeholder
       {
-        match: /(\(\)\.slateTextArea,\w+\),placeholder:)(\w+)(,)/g,
+        match:
+          /({className:\w+\(\)\(\w+\(\)\.placeholder,\w+\),"aria-hidden":!0,children:)(\w+)(})/g,
         replace: replaceWithClass("emoji-textarea-placeholder"),
       },
       // Channel top message
