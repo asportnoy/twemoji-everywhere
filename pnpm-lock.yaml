@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/lodash': ^4.14.191
   '@types/node': ^18.11.2
   '@types/react': ^18.0.27
   '@typescript-eslint/eslint-plugin': ^5.40.1
@@ -14,6 +15,7 @@ specifiers:
   typescript: ^4.8.4
 
 devDependencies:
+  '@types/lodash': 4.14.191
   '@types/node': 18.11.2
   '@types/react': 18.0.27
   '@typescript-eslint/eslint-plugin': 5.40.1_ukgdydjtebaxmxfqp5v5ulh64y
@@ -1378,6 +1380,10 @@ packages:
 
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
+    dev: true
+
+  /@types/lodash/4.14.191:
+    resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
     dev: true
 
   /@types/minimatch/5.1.2:
