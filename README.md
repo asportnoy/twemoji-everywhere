@@ -20,4 +20,5 @@ themselves).
 - Names in user profile
 - Embed author names
 - Embed footer text
+- Code blocks (embed and block)
 - Mentions (all types)
