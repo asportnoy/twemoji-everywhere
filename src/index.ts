@@ -1,7 +1,6 @@
 import { Injector, Logger, common, webpack } from "replugged";
-const { lodash: _, parser } = common;
+const { React, lodash: _, parser } = common;
 const { filters, getFunctionKeyBySource, waitForModule } = webpack;
-import type React from "react";
 import "./style.css";
 
 const logger = Logger.plugin("dev.albertp.TwemojiEverywhere");
@@ -114,6 +113,49 @@ async function patchEmbeds(): Promise<void> {
   });
 }
 
+function recursivelyPatchCodeBlock(html: string): Array<string | React.ReactNode> {
+  const el = document.createElement("div");
+  el.innerHTML = html;
+  const parts = Array.from(el.childNodes).map((x) => {
+    if (x.nodeType === x.TEXT_NODE) {
+      return patchText(x.textContent || "", "emoji-code-block");
+    }
+    if (x.nodeType === x.ELEMENT_NODE && x.nodeName === "SPAN") {
+      const attrs = Object.fromEntries(
+        Array.from((x as Element).attributes).map((x) => [x.name, x.value]),
+      );
+
+      const children = recursivelyPatchCodeBlock((x as Element).innerHTML || "");
+
+      return React.createElement("span", attrs, children);
+    }
+    return null;
+  });
+
+  return _.compact(parts);
+}
+
+function patchCodeBlocks(): void {
+  injector.after(parser.defaultRules.inlineCode, "react", (_, res) => {
+    res.props.children = patchText(res.props.children, "emoji-inline-code");
+  });
+
+  injector.after(parser.defaultRules.codeBlock, "react", (_, res) => {
+    const uninject = injector.after(res.props.children.props, "render", (_, res) => {
+      uninject();
+
+      if (res.props.dangerouslySetInnerHTML) {
+        const html = res.props.dangerouslySetInnerHTML.__html;
+        const parts = recursivelyPatchCodeBlock(html);
+        res.props.children = parts;
+        delete res.props.dangerouslySetInnerHTML;
+      } else {
+        res.props.children = patchText(res.props.children, "emoji-code-block");
+      }
+    });
+  });
+}
+
 let running = false;
 
 export function start(): void {
@@ -130,6 +172,7 @@ export function start(): void {
   void patchPopoutName();
   void patchPopoutNickname();
   void patchEmbeds();
+  patchCodeBlocks();
 }
 
 export function stop(): void {

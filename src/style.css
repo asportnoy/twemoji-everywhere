@@ -82,3 +82,25 @@
 [data-text-variant="heading-xxl/semibold"] .twemoji-everywhere-emoji {
   height: 42px;
 }
+
+.twemoji-everywhere-emoji.emoji-code-block {
+  height: 16px;
+  vertical-align: initial;
+}
+
+.twemoji-everywhere-emoji.emoji-code-block .emoji {
+  height: 14px;
+  vertical-align: middle;
+}
+
+.twemoji-everywhere-emoji.emoji-inline-code {
+  height: 18px;
+  vertical-align: initial;
+}
+
+.twemoji-everywhere-emoji.emoji-inline-code .emoji {
+  height: 15px;
+  vertical-align: middle;
+  margin-top: -0.2em;
+  padding: 0.3em 0;
+}
