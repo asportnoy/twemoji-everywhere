@@ -70,6 +70,29 @@ async function patchChannelHeader(): Promise<void> {
   });
 }
 
+async function patchChannelMentions(): Promise<void> {
+  const mentionMod = await waitForModule<{
+    exports: Record<string, (...args: unknown[]) => React.ReactElement>;
+  }>(filters.bySource(/\w+=\w+.iconType/), {
+    raw: true,
+  });
+
+  const keys = Object.keys(mentionMod.exports);
+  if (keys.length > 1) {
+    logger.error("More than one key found in mention mod, cannot patch.");
+    return;
+  }
+
+  injector.after(mentionMod.exports, keys[0], (_args, res) => {
+    const props = _.get(res, "props.children[2][0].props");
+    if (!props) return;
+    if (typeof props !== "object") return;
+    if (!("children" in props)) return;
+    if (typeof props.children !== "string") return;
+    props.children = patchText(props.children, "emoji-mention");
+  });
+}
+
 async function patchPopoutName(): Promise<void> {
   const popoutNameMod = await waitForModule<Record<string, MemberMod>>(
     filters.bySource(".invertBotTagColor"),
@@ -169,6 +192,7 @@ export function start(): void {
   }
 
   void patchChannelHeader();
+  void patchChannelMentions();
   void patchPopoutName();
   void patchPopoutNickname();
   void patchEmbeds();

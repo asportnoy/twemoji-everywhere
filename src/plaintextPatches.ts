@@ -63,19 +63,15 @@ const patches: types.PlaintextPatch[] = [
         match: /(\(\)\.username,.+,children:)(\w+\+\w+)(})/g,
         replace: replaceWithClass("emoji-popout-username"),
       },
-      // Channel mention
-      {
-        match: /(className:"channelMention",[^}]*,children:)([^}]+)(})/g,
-        replace: replaceWithClass("emoji-mention"),
-      },
       // Role mention
       {
-        match: /(children:)([^}]+)(}.+className:"mention")/g,
+        match:
+          /(children:)(\w+\(\w+\.content,\w+\))(}\),\w+\.key\):\(0,\w+\.jsx\)\(\w+,{className:"mention")/g,
         replace: replaceWithClass("emoji-mention"),
       },
       // User mention
       {
-        match: /(children:)("@"\.concat\(\w+\))()/g,
+        match: /(children:)("@"\.concat\(null!=\w+\?\w+:\w+\))()/g,
         replace: replaceWithClass("emoji-mention"),
       },
       // Roles on profile
