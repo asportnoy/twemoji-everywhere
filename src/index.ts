@@ -73,7 +73,7 @@ async function patchChannelHeader(): Promise<void> {
 async function patchChannelMentions(): Promise<void> {
   const mentionMod = await waitForModule<{
     exports: Record<string, (...args: unknown[]) => React.ReactElement>;
-  }>(filters.bySource(/\w+=\w+.iconType/), {
+  }>(filters.bySource(/\w+=\w+\.color,\w+=\w+\.iconType/), {
     raw: true,
   });
 
@@ -88,7 +88,7 @@ async function patchChannelMentions(): Promise<void> {
     if (!props) return;
     if (typeof props !== "object") return;
     if (!("children" in props)) return;
-    if (typeof props.children !== "string") return;
+    if (typeof props.children !== "string" && !Array.isArray(props.children)) return;
     props.children = patchText(props.children, "emoji-mention");
   });
 }
