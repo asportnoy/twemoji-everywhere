@@ -15,10 +15,6 @@ const patches: types.PlaintextPatch[] = [
     replacements: [
       // Channel name
       {
-        match: /(\(\).channelName\)?,[^}]*children:)([\w=:?]+(?:\.name)?)(})/g,
-        replace: replaceWithClass("emoji-channel-name"),
-      },
-      {
         match: /(\(\).channelName\)?,[^}]*children:\[)(null==\w+\?\w+:\w+)()/g,
         replace: replaceWithClass("emoji-channel-name"),
       },
@@ -57,11 +53,6 @@ const patches: types.PlaintextPatch[] = [
       {
         match: /(\w=)(\w+\.title)(,\w+=\w+\.count[\s\S]+?className:\w+\(\)\.membersGroup)/g,
         replace: replaceWithClass("emoji-member-list-role-name"),
-      },
-      // Member popout username
-      {
-        match: /(\(\)\.username,.+,children:)(\w+\+\w+)(})/g,
-        replace: replaceWithClass("emoji-popout-username"),
       },
       // Role mention
       {
