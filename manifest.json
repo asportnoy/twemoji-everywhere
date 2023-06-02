@@ -7,10 +7,10 @@
     "discordID": "489484338514100234",
     "github": "asportnoy"
   },
-  "version": "1.1.12",
+  "version": "1.1.13",
   "updater": {
-    "type": "github",
-    "id": "asportnoy/twemoji-everywhere"
+    "type": "store",
+    "id": "dev.albertp.TwemojiEverywhere"
   },
   "license": "MIT",
   "type": "replugged-plugin",
