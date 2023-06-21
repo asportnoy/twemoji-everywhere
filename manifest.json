@@ -15,5 +15,11 @@
   "license": "MIT",
   "type": "replugged-plugin",
   "renderer": "src/index.ts",
-  "plaintextPatches": "src/plaintextPatches.ts"
+  "plaintextPatches": "src/plaintextPatches.ts",
+  "source": "https://github.com/asportnoy/twemoji-everywhere",
+  "image": [
+    "https://i.imgur.com/l3lEzhI.png",
+    "https://i.imgur.com/cRIhrEQ.png",
+    "https://i.imgur.com/pCrmSEX.png"
+  ]
 }
