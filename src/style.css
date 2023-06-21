@@ -71,12 +71,12 @@
   height: 19px;
 }
 
-.twemoji-everywhere-emoji.emoji-author-name {
+.twemoji-everywhere-emoji.emoji-embed-author {
   height: 16px;
 }
 
-.twemoji-everywhere-emoji.emoji-footer-name {
-  height: 56px;
+.twemoji-everywhere-emoji.emoji-embed-footer {
+  height: 12px;
 }
 
 [data-text-variant="heading-xxl/semibold"] .twemoji-everywhere-emoji {
@@ -88,7 +88,7 @@
   vertical-align: initial;
 }
 
-.twemoji-everywhere-emoji.emoji-code-block .emoji {
+.twemoji-everywhere-emoji.emoji-code-block {
   height: 14px;
   vertical-align: middle;
 }
@@ -103,4 +103,8 @@
   vertical-align: middle;
   margin-top: -0.2em;
   padding: 0.3em 0;
+}
+
+.twemoji-everywhere-emoji.emoji-message-username {
+  height: 1rem;
 }

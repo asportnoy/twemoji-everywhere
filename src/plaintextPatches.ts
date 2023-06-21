@@ -70,6 +70,11 @@ const patches: types.PlaintextPatch[] = [
         match: /(className:\w+\(\)\.roleNameOverflow,children:)(\w+\.name)(})/g,
         replace: replaceWithClass("emoji-profile-roles"),
       },
+      // Message username
+      {
+        match: /(\(\)\.username,[^}]+{[^}]+}[^}]+children:)(\w+\+\w+)(})/g,
+        replace: replaceWithClass("emoji-message-username"),
+      },
     ],
   },
 ];
