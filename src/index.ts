@@ -1,4 +1,4 @@
-import { Injector, Logger, common, webpack } from "replugged";
+import { Injector, Logger, common, util, webpack } from "replugged";
 const { React, lodash: _, parser } = common;
 const { filters, getFunctionKeyBySource, waitForModule } = webpack;
 import "./style.css";
@@ -164,7 +164,11 @@ function patchCodeBlocks(): void {
   });
 
   injector.after(parser.defaultRules.codeBlock, "react", (_, res) => {
-    const uninject = injector.after(res.props.children.props, "render", (_, res) => {
+    const child = util.findInReactTree(res, (x) => x && "render" in x) as {
+      render: (args: unknown) => React.ReactElement;
+    };
+    if (!child) return;
+    const uninject = injector.after(child, "render", (_, res) => {
       uninject();
 
       if (res.props.dangerouslySetInnerHTML) {
