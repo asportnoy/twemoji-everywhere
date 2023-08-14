@@ -49,7 +49,8 @@
   height: 16px;
 }
 
-[class*="channelName-"] {
+[class*="channelName-"],
+[class*="iconContainer-"] + [class*="name-"] {
   display: inline-flex;
   align-items: center;
   white-space: pre;

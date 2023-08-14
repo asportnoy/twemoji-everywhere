@@ -1,12 +1,12 @@
 import { types } from "replugged";
 
-const patchFn = `window.replugged.plugins.getExports('dev.albertp.TwemojiEverywhere').patchText`;
+const pluginExports = `window.replugged.plugins.getExports('dev.albertp.TwemojiEverywhere')`;
 
 const replaceWithClass = (
   className: string,
 ): ((_: string, prefix: unknown, text: unknown, suffix: unknown) => string) => {
   return (_, prefix, text, suffix): string => {
-    return `${prefix}${patchFn}(${text}, "${className}")${suffix}`;
+    return `${prefix}(${pluginExports} ? ${pluginExports}.patchText(${text}, "${className}") : ${text})${suffix}`;
   };
 };
 
@@ -16,6 +16,11 @@ const patches: types.PlaintextPatch[] = [
       // Channel name
       {
         match: /(\(\).channelName\)?,[^}]*children:\[)(null==\w+\?\w+:\w+)()/g,
+        replace: replaceWithClass("emoji-channel-name"),
+      },
+      {
+        match:
+          /({className:\w+\(\)\(\w+\(\).name\),"aria-hidden":!0,children:)(null==\w+\?\w+:\w+)(})/g,
         replace: replaceWithClass("emoji-channel-name"),
       },
       // Category name

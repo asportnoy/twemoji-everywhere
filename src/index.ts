@@ -8,10 +8,6 @@ const injector = new Injector();
 
 let emojiParser: ReturnType<typeof parser.reactParserFor> | undefined;
 
-type ChannelHeader = React.FC & {
-  Title: (...args: unknown[]) => unknown;
-};
-
 type MemberMod = (args: {
   name?: string | React.ReactElement;
   nickname?: string | React.ReactElement;
@@ -38,6 +34,7 @@ const memberReplaceFn: (args: Parameters<MemberMod>) => void = ([args]) => {
 };
 
 const headerPaths = [
+  "children.props",
   "children[0].props.children[1].props.children.props",
   "children[0].props.children[2].props.children.props",
   "children[0].props.children[0].props.children[1].props",
@@ -45,15 +42,12 @@ const headerPaths = [
 ];
 
 async function patchChannelHeader(): Promise<void> {
-  const headerMod = await waitForModule<Record<string, ChannelHeader>>(
-    filters.bySource(/\w+.Icon=\w+;\w+\.Title=/),
-  );
-  const headerModKey = getFunctionKeyBySource(headerMod, "().toolbar");
-  if (!headerModKey) {
-    logger.warn("Could not find channel header module");
-    return;
-  }
-  injector.before(headerMod, headerModKey, ([args]) => {
+  const headerMod = await waitForModule<{
+    Z: {
+      Title: (...args: unknown[]) => React.ReactElement;
+    };
+  }>(filters.bySource(/\w+=\w+\.mobileToolbar/));
+  injector.before(headerMod.Z, "Title", ([args]) => {
     const children = headerPaths.map((x) => _.get(args, x));
     children.forEach((child) => {
       if (!child) return;
